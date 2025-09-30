@@ -51,5 +51,13 @@ content = {
 
 updated = requests.put(url, json=content, auth=(
     envs['user'], envs['token'])).json()
-link = updated['_links']['base'] + updated['_links']['webui']
-print(f'Uploaded content successfully to page {link}')
+
+print("Confluence API response:", updated)
+
+if isinstance(updated, dict) and '_links' in updated:
+    link = updated['_links']['base'] + updated['_links']['webui']
+    print("Confluence page updated:", link)
+else:
+    print("Confluence API response did not contain '_links':", updated)
+    raise KeyError(f"Expected '_links' in response, got: {updated}")
+
